@@ -23,6 +23,10 @@ var pet_satis_text;
 
 var max_pet_satis_time;
 
+var inputName;
+var button;
+var greeting;
+
 function setup() {
     createCanvas(500, 500);
 
@@ -49,6 +53,20 @@ function setup() {
     updatePlayerCount();
     console.log(playerCount);
 
+    inputName = createInput("").attribute("place-holder", "Name");
+    inputName.position(500, 90);
+    button = createButton("Play");
+    button.position(430, 90);
+    greeting = createElement('h2');
+    greeting.position(500, 40);
+    greeting.html("Enter your pet's name here");
+    button.mousePressed(function () {
+        inputName.hide();
+        button.hide();
+        greeting.html("Welcome, the Owner of " + inputName.value());
+        greeting.position(400, 40);
+    });
+
     dog = new Sprite(200, 200, 100, 100, "images/Dog.png", "images/happydog.png", 1);
 
     max_pet_satis_time = 15 * 30;
@@ -60,7 +78,7 @@ function setup() {
 }
 
 function draw() {
-    console.log("Game State: ", gameState);
+    console.log(inputName.value());
     if (stock_data !== undefined && playerCount_data !== undefined) {
         resetDogMoodTimer = Math.round(counter / 30);
         background(46, 139, 87);
@@ -117,9 +135,9 @@ function draw() {
     }
 }
 
-function moveDog(x, y) {
-    dog.sprite
-}
+// function moveDog(x, y) {
+//     dog.sprite
+// }
 
 function tossBottle() {
 
