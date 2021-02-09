@@ -53,18 +53,18 @@ function setup() {
     updatePlayerCount();
     console.log(playerCount);
 
-    inputName = createInput("").attribute("place-holder", "Name");
-    inputName.position(500, 90);
+    inputName = createInput("Name").attribute("place-holder", "Name").size(80).attribute("maxlength", 10);
+    inputName.position(580, 65);
     button = createButton("Play");
-    button.position(430, 90);
+    button.position(690, 65);
     greeting = createElement('h2');
-    greeting.position(500, 40);
-    greeting.html("Enter your pet's name here");
+    greeting.position(400, 40);
+    greeting.html("Your pet's name: ");
     button.mousePressed(function () {
         inputName.hide();
         button.hide();
-        greeting.html("Welcome, the Owner of " + inputName.value());
-        greeting.position(400, 40);
+        greeting.html("Your virtual pet '" + inputName.value() + "' is waiting for you.");
+        greeting.position(380, 40);
     });
 
     dog = new Sprite(200, 200, 100, 100, "images/Dog.png", "images/happydog.png", 1);
