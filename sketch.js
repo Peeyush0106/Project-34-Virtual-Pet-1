@@ -53,7 +53,7 @@ function setup() {
     updatePlayerCount();
     console.log(playerCount);
 
-
+    // "15 * 30" means 15 seconds. 30 is the universal framerate
     max_pet_satis_time = 15 * 30;
     gameState = "solving-form";
     gameText = pet_hungry_text;
@@ -78,12 +78,12 @@ function setup() {
         pet_satis_text = "You have fed " + inputName.value() + "!";
     });
 
-
     dog = new Sprite(200, 200, 100, 100, "images/Dog.png", "images/happydog.png", 1);
 }
 
 function draw() {
-    console.log(inputName.value());
+    // console.log(inputName.value());
+    console.log(gameState);
     if (stock_data !== undefined && playerCount_data !== undefined) {
         background(46, 139, 87);
         if (gameState !== "solving-form") {
@@ -112,34 +112,35 @@ function draw() {
                 gameState = "satis";
                 gameText = pet_satis_text;
             }
-            // if (gameState === "satis") {
-            //     dog.changePicture(dog.image2);
-            //     if (resetDogMoodTimer > 0) {
-            //         counter -= 1;
-            //         if (dog.x < 400 && dog.y === 200) {
-            //             dog.x += 0.2;
-            //         }
-            //         else if (dog.x >= 400 && dog.y < 400) {
-            //             dog.y += 0.2;
-            //         }
-            //         else if (dog.y >= 400 && dog.x < 200) {
-            //             dog.x -= 0.2;
-            //         }
-            //         else if (dog.y > 200) {
-            //             dog.y -= 0.2;
-            //         }
-            //     }
-            //     else {
-            //         gameState = "hungry";
-            //         counter = max_pet_satis_time;
-            //     }
-            // }
+            if (gameState === "satis") {
+                dog.changePicture(dog.image2);
+                if (resetDogMoodTimer > 0) {
+                    counter -= 1;
+                    // if (dog.x < 400 && dog.y === 200) {
+                    //     dog.x += 0.2;
+                    // }
+                    // else if (dog.x >= 400 && dog.y < 400) {
+                    //     dog.y += 0.2;
+                    // }
+                    // else if (dog.y >= 400 && dog.x < 200) {
+                    //     dog.x -= 0.2;
+                    // }
+                    // else if (dog.y > 200) {
+                    //     dog.y -= 0.2;
+                    // }
+                }
+                else {
+                    gameState = "hungry";
+                    counter = max_pet_satis_time;
+                }
+            }
             updateFoodStockCount();
             updateName();
             textSize(25);
             fill("blue");
             text("Food Left: " + food_stock, 30, 100);
             if (counter < 14.9 * 30) {
+                console.log("In Counter if condition");
                 push();
                 textSize(17.5);
                 fill("orange");
