@@ -1,7 +1,7 @@
 // Global Variables in our game
 var dog_norm, dog_hap;
 
-var database, stock_data;
+var database;
 
 var food_stock;
 
@@ -33,10 +33,10 @@ function setup() {
     food_stock = 20;
 
     database = firebase.database();
-    stock_data = database.ref("Dog/Food/inStock");
-    stock_data.on("value", function (data) {
-        food_stock = data.val();
-    });
+    // stock_data = database.ref("Dog/Food/inStock");
+    // stock_data.on("value", function (data) {
+    //     food_stock = data.val();
+    // });
 
     // playerCount_data = database.ref("PlayerDat/Count");
     // playerCount_data.on("value", function (data) {
@@ -63,6 +63,15 @@ function setup() {
     inputName.position(600, 65);
     button = createButton("Play");
     button.position(690, 65);
+    up_arrow = createButton("Up Arrow");
+    up_arrow.position(690, 450);
+    up_arrow.mousePressed(function () {
+        if (food_stock > 0 && gameState === "hungry") {
+            food_stock -= 1;
+            gameState = "satis";
+            gameText = pet_satis_text;
+        }
+    });
     start_text = createElement('h2');
     start_text.position(400, 40);
     start_text.html("Your pet's name: ");
@@ -74,7 +83,7 @@ function setup() {
         greeting.html("Your virtual pet '" + inputName.value() + "' is waiting for you.");
         greeting.position(380, 40);
         gameState = "hungry";
-        pet_hungry_text = [(inputName.value() + "'s hungry."), ("Feed it milk by pressing up arrow")];
+        pet_hungry_text = [(inputName.value() + "'s hungry."), ("Press the button above or 'Up Arrow' key on your keyboard to feed it milk.")];
         pet_satis_text = "You have fed " + inputName.value() + "!";
     });
 
@@ -84,7 +93,7 @@ function setup() {
 function draw() {
     // console.log(inputName.value());
     console.log(gameState);
-    if (stock_data !== undefined && playerCount_data !== undefined) {
+    if (playerCount_data !== undefined) {
         background(46, 139, 87);
         if (gameState !== "solving-form") {
             resetDogMoodTimer = Math.round(counter / 30);
@@ -94,7 +103,7 @@ function draw() {
                 gameText = [pet_hungry_text[0], pet_hungry_text[1]];
                 push();
                 fill("yellow");
-                textSize(25);
+                textSize(17.5);
                 text(gameText[0], 15, 430, 498, 500);
                 text(gameText[1], 15, 460, 498, 500);
                 pop();
@@ -108,7 +117,6 @@ function draw() {
             }
             if (keyDown("up") && food_stock > 0 && gameState === "hungry") {
                 food_stock -= 1;
-                tossBottle();
                 gameState = "satis";
                 gameText = pet_satis_text;
             }
@@ -116,31 +124,18 @@ function draw() {
                 dog.changePicture(dog.image2);
                 if (resetDogMoodTimer > 0) {
                     counter -= 1;
-                    // if (dog.x < 400 && dog.y === 200) {
-                    //     dog.x += 0.2;
-                    // }
-                    // else if (dog.x >= 400 && dog.y < 400) {
-                    //     dog.y += 0.2;
-                    // }
-                    // else if (dog.y >= 400 && dog.x < 200) {
-                    //     dog.x -= 0.2;
-                    // }
-                    // else if (dog.y > 200) {
-                    //     dog.y -= 0.2;
-                    // }
                 }
                 else {
                     gameState = "hungry";
                     counter = max_pet_satis_time;
                 }
             }
-            updateFoodStockCount();
+            // updateFoodStockCount();
             updateName();
             textSize(25);
             fill("blue");
             text("Food Left: " + food_stock, 30, 100);
             if (counter < 14.9 * 30) {
-                console.log("In Counter if condition");
                 push();
                 textSize(17.5);
                 fill("orange");
@@ -150,14 +145,6 @@ function draw() {
         }
         dog.display();
     }
-}
-
-// function moveDog(x, y) {
-//     dog.sprite
-// }
-
-function tossBottle() {
-
 }
 
 function updatePlayerCount() {
