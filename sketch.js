@@ -53,85 +53,101 @@ function setup() {
     updatePlayerCount();
     console.log(playerCount);
 
-    inputName = createInput("Name").attribute("place-holder", "Name").size(80).attribute("maxlength", 10);
-    inputName.position(580, 65);
+
+    max_pet_satis_time = 15 * 30;
+    gameState = "solving-form";
+    gameText = pet_hungry_text;
+    counter = max_pet_satis_time;
+
+    inputName = createInput("Your pet").attribute("place-holder", "Name").size(80).attribute("maxlength", 10);
+    inputName.position(600, 65);
     button = createButton("Play");
     button.position(690, 65);
-    greeting = createElement('h2');
-    greeting.position(400, 40);
-    greeting.html("Your pet's name: ");
+    start_text = createElement('h2');
+    start_text.position(400, 40);
+    start_text.html("Your pet's name: ");
     button.mousePressed(function () {
         inputName.hide();
         button.hide();
+        start_text.hide();
+        greeting = createElement('h3');
         greeting.html("Your virtual pet '" + inputName.value() + "' is waiting for you.");
         greeting.position(380, 40);
+        gameState = "hungry";
+        pet_hungry_text = [(inputName.value() + "'s hungry."), ("Feed it milk by pressing up arrow")];
+        pet_satis_text = "You have fed " + inputName.value() + "!";
     });
 
-    dog = new Sprite(200, 200, 100, 100, "images/Dog.png", "images/happydog.png", 1);
 
-    max_pet_satis_time = 15 * 30;
-    pet_hungry_text = "Your pet's Hungry. Feed it milk by pressing up arrow";
-    pet_satis_text = "You have fed your dog!"
-    gameState = "hungry";
-    gameText = pet_hungry_text;
-    counter = max_pet_satis_time;
+    dog = new Sprite(200, 200, 100, 100, "images/Dog.png", "images/happydog.png", 1);
 }
 
 function draw() {
     console.log(inputName.value());
     if (stock_data !== undefined && playerCount_data !== undefined) {
-        resetDogMoodTimer = Math.round(counter / 30);
         background(46, 139, 87);
-        imageMode(CENTER);
-        if (gameState === "hungry") {
-            dog.changePicture(dog.image1);
-            gameText = pet_hungry_text;
-        }
-        if (keyDown("up") && food_stock > 0 && gameState === "hungry") {
-            food_stock -= 1;
-            tossBottle();
-            gameState = "satis";
-            gameText = pet_satis_text;
-        }
-        if (gameState === "satis") {
-            dog.changePicture(dog.image2);
-            if (resetDogMoodTimer > 0) {
-                counter -= 1;
-                if (dog.x < 400 && dog.y === 200) {
-                    dog.x += 0.2;
-                }
-                else if (dog.x >= 400 && dog.y < 400) {
-                    dog.y += 0.2;
-                }
-                else if (dog.y >= 400 && dog.x < 200) {
-                    dog.x -= 0.2;
-                }
-                else if (dog.y > 200) {
-                    dog.y -= 0.2;
-                }
+        if (gameState !== "solving-form") {
+            resetDogMoodTimer = Math.round(counter / 30);
+            imageMode(CENTER);
+            if (gameState === "hungry") {
+                dog.changePicture(dog.image1);
+                gameText = [pet_hungry_text[0], pet_hungry_text[1]];
+                push();
+                fill("yellow");
+                textSize(25);
+                text(gameText[0], 15, 430, 498, 500);
+                text(gameText[1], 15, 460, 498, 500);
+                pop();
             }
             else {
-                gameState = "hungry";
-                counter = max_pet_satis_time;
+                push();
+                textSize(25);
+                fill("yellow");
+                text(gameText, 15, 430, 498, 500);
+                pop();
+            }
+            if (keyDown("up") && food_stock > 0 && gameState === "hungry") {
+                food_stock -= 1;
+                tossBottle();
+                gameState = "satis";
+                gameText = pet_satis_text;
+            }
+            // if (gameState === "satis") {
+            //     dog.changePicture(dog.image2);
+            //     if (resetDogMoodTimer > 0) {
+            //         counter -= 1;
+            //         if (dog.x < 400 && dog.y === 200) {
+            //             dog.x += 0.2;
+            //         }
+            //         else if (dog.x >= 400 && dog.y < 400) {
+            //             dog.y += 0.2;
+            //         }
+            //         else if (dog.y >= 400 && dog.x < 200) {
+            //             dog.x -= 0.2;
+            //         }
+            //         else if (dog.y > 200) {
+            //             dog.y -= 0.2;
+            //         }
+            //     }
+            //     else {
+            //         gameState = "hungry";
+            //         counter = max_pet_satis_time;
+            //     }
+            // }
+            updateFoodStockCount();
+            updateName();
+            textSize(25);
+            fill("blue");
+            text("Food Left: " + food_stock, 30, 100);
+            if (counter < 14.9 * 30) {
+                push();
+                textSize(17.5);
+                fill("orange");
+                text(inputName.value() + " will be hungry again in: " + resetDogMoodTimer + " seconds", 100, 150);
+                pop();
             }
         }
-        updateFoodStockCount();
-        updateName();
         dog.display();
-        textSize(25);
-        fill("blue");
-        text("Food Left: " + food_stock, 30, 100);
-        push();
-        fill("yellow");
-        text(gameText, 15, 430, 498, 500);
-        pop();
-        if (counter < 14.9 * 30) {
-            push();
-            textSize(17.5);
-            fill("orange");
-            text("Your pet get's hungry again in: " + resetDogMoodTimer + " seconds", 100, 150);
-            pop();
-        }
     }
 }
 
