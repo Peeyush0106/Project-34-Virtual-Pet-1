@@ -30,7 +30,8 @@ var greeting;
 var txt1, txt2, txt3;
 
 function setup() {
-    createCanvas(700, 500);
+    var canvas = createCanvas(700, 500);
+	canvas.position(-350, -50);
 
     food_stock = 20;
 
@@ -60,31 +61,31 @@ function setup() {
     gameText = pet_hungry_text;
     counter = max_pet_satis_time;
 
-    inputName = createInput("Your pet").attribute("place-holder", "Name").size(80).attribute("maxlength", 10).position(600, 65).style("background-color", "yellow");
-    up_arrow = createButton("Up Arrow").hide().position(690, 450).style("color", "blue").style("background-color", "yellow").mousePressed(function () {
+    inputName = createInput("Your pet").attribute("place-holder", "Name").size(80).attribute("maxlength", 10).position(250, 15).style("background-color", "yellow");
+    up_arrow = createButton("Up Arrow").hide().position(340, 400).style("color", "blue").style("background-color", "yellow").mousePressed(function () {
         if (food_stock > 0 && gameState === "hungry") {
             food_stock -= 1;
             gameState = "satis";
             gameText = pet_satis_text;
         }
     });
-    start_text = createElement('h2').position(400, 40).html("Your pet's name: ");
-    button = createButton("Play").position(690, 65).style("background-color", "blue").style("color", "white").mousePressed(function () {
+    start_text = createElement('h2').position(50, -10).html("Your pet's name: ");
+    button = createButton("Play").position(340, 15).style("background-color", "blue").style("color", "white").mousePressed(function () {
         inputName.hide();
         button.hide();
         start_text.hide();
-        greeting = createElement('h3').html("Your virtual pet '" + inputName.value() + "' is waiting for you.").position(380, 40).hide();
+        greeting = createElement('h3').html("Your virtual pet '" + inputName.value() + "' is waiting for you.").position(40, -10).hide();
         gameState = "hungry";
         pet_hungry_text = [(inputName.value() + "'s hungry."), ("Press the button above or 'Up Arrow' key on your keyboard to feed it milk.")];
         pet_satis_text = "You've fed " + inputName.value() + "! Get it on a walk using your mouse";
     });
 
-    txt1 = createElement('h2').position(370, 430).style("color", "black").style("background-color", "orange");
-    txt2 = createElement('h2').position(370, 460).style("color", "black").style("background-color", "orange");
-    txt3 = createElement('h2').position(370, 490).style("color", "black").style("background-color", "orange");
-    txt4 = createElement('h2').position(360, 480).style("color", "black").style("background-color", "orange");
-    txt5 = createElement('h2').position(400, 100).style("color", "blue").html("Food Left: " + food_stock).hide();
-    txt6 = createElement('h2').position(400, 150).style("color", "orange").html(inputName.value() + " will be hungry again in: " + resetDogMoodTimer + " seconds").hide();
+    txt1 = createElement('h2').position(20, 390).style("color", "black").style("background-color", "orange");
+    txt2 = createElement('h2').position(20, 420).style("color", "black").style("background-color", "orange");
+    txt3 = createElement('h2').position(20, 450).style("color", "black").style("background-color", "orange");
+    txt4 = createElement('h2').position(10, 440).style("color", "black").style("background-color", "orange");
+    txt5 = createElement('h2').position(50, 60).style("color", "blue").html("Food Left: " + food_stock).hide();
+    txt6 = createElement('h2').position(50, 95).style("color", "orange").html(inputName.value() + " will be hungry again in: " + resetDogMoodTimer + " seconds").hide();
 
     dog = new Sprite(200, 200, 100, 100, "images/Dog.png", "images/happydog.png", 1);
 }
